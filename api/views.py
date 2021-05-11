@@ -69,7 +69,10 @@ def email_verify_code(request):
                     data = {"status": "OK", "msg": "Đăng ký thành công!"}
                     return JsonResponse(data)
             else:
-                data = {"status": "NOK", "msg": "Mã xác nhận sai, vui lòng thao tác lại"}
+                data = {
+                    "status": "NOK",
+                    "msg": "Mã xác nhận sai, vui lòng thao tác lại",
+                }
                 return JsonResponse(data)
     except Exception as error:
         return HttpResponse(error)
@@ -85,19 +88,22 @@ def request_send_code(request):
             Model.code = code
             Model.save()
             send_mail(
-                    "Số xác thực đăng ký WiFi VLUTE",
-                    "Xin chào người sử dụng\n\n"
-                    "Số xác thực đăng ký WiFi VLUTE của bạn là: "
-                    + str(code) + '\n\n'
-                    + "Nếu cần giúp đỡ, xin vui lòng liên hệ Khoa công nghệ thông tin qua các kênh sau đây: \n\n"
-                    + "- Địa chỉ: \n"
-                    + "    ◽️ Văn phòng khoa phòng C601\n"
-                    + "    ◽️ Trường Đại Học Sư Phạm Kỹ Thuật Vĩnh Long\n"
-                    + "- Phone: (+84) 02703828320\n"
-                    + "- Email: cit@vlute.edu.vn\n\n"
-                    + "TRÂN TRỌNG CÁM ƠN!",
+                "Số xác thực đăng ký WiFi VLUTE",
+                "Xin chào người sử dụng\n\n"
+                "Số xác thực đăng ký WiFi VLUTE của bạn là: "
+                + str(code)
+                + "\n\n"
+                + "Nếu cần giúp đỡ, xin vui lòng liên hệ Khoa công nghệ thông tin qua các kênh sau đây: \n\n"
+                + "- Địa chỉ: \n"
+                + "    ◽️ Văn phòng khoa phòng C601\n"
+                + "    ◽️ Trường Đại Học Sư Phạm Kỹ Thuật Vĩnh Long\n"
+                + "- Phone: (+84) 02703828320\n"
+                + "- Email: cit@vlute.edu.vn\n\n"
+                + "TRÂN TRỌNG CÁM ƠN!",
                 settings.EMAIL_HOST_USER,
-                [email,]
+                [
+                    email,
+                ],
             )
             data = {
                 "status": "OK",
@@ -107,10 +113,11 @@ def request_send_code(request):
     except Exception as error:
         return HttpResponse(error)
 
+
 def request_delete_client(request):
     try:
         if request.is_ajax():
-            client = request.GET.get('client')
+            client = request.GET.get("client")
             Model = UserInformation.objects.get(device_mac_address=client)
             Model.delete()
             data = {"status": "OK", "msg": "Xóa thiết bị thành công"}
@@ -126,45 +133,60 @@ def request_student_information(request):
                 StudentInformation.objects.all().delete()
                 student_code_range = range(17004001, 17004242)
                 for student_code in student_code_range:
-                    url = 'https://ems.vlute.edu.vn/api/danhmuc/getsinhvienbykeyword/' + str(student_code)
+                    url = (
+                        "https://ems.vlute.edu.vn/api/danhmuc/getsinhvienbykeyword/"
+                        + str(student_code)
+                    )
                     request_get = Session.get(url)
-                    data = json.loads(request_get.content.decode('ascii'))[0]
+                    data = json.loads(request_get.content.decode("ascii"))[0]
                     model = StudentInformation(
-                        student_id= str(data['id']),
-                        student_code = str(data['maSV']),
-                        student_name = str(data['ho']) + ' ' + str(data['ten']),
-                        student_classmate = str(data['maLopCN']),
-                        student_email = str(data['maSV']) + '@student.vlute.edu.vn'
-                        )
+                        student_id=str(data["id"]),
+                        student_code=str(data["maSV"]),
+                        student_name=str(data["ho"]) + " " + str(data["ten"]),
+                        student_classmate=str(data["maLopCN"]),
+                        student_email=str(data["maSV"]) + "@student.vlute.edu.vn",
+                    )
                     model.save()
     except Exception as error:
         return HttpResponse(error)
 
+
 def request_list_student_auto_complete(request):
     try:
         if request.is_ajax():
-            student_name_list = list(StudentInformation.objects.values_list('student_name', flat=True))
-            student_classmate_list = list(set(StudentInformation.objects.values_list('student_classmate', flat=True)))
-            student_email_list = list(StudentInformation.objects.values_list('student_email', flat=True))
+            student_name_list = list(
+                StudentInformation.objects.values_list("student_name", flat=True)
+            )
+            student_classmate_list = list(
+                set(
+                    StudentInformation.objects.values_list(
+                        "student_classmate", flat=True
+                    )
+                )
+            )
+            student_email_list = list(
+                StudentInformation.objects.values_list("student_email", flat=True)
+            )
             data = {
-                'student_name_list' : student_name_list,
-                'student_classmate_list': student_classmate_list,
-                'student_email_list': student_email_list
+                "student_name_list": student_name_list,
+                "student_classmate_list": student_classmate_list,
+                "student_email_list": student_email_list,
             }
             return JsonResponse(data)
     except Exception as error:
         return HttpResponse(error)
 
+
 def request_check_student_information(request):
     try:
         if request.is_ajax():
-            student_email = request.GET.get('student_email')
+            student_email = request.GET.get("student_email")
             model = StudentInformation.objects.get(student_email=student_email)
             student_name = model.student_name
             student_classmate = model.student_classmate
             data = {
-                'student_name': student_name,
-                'student_classmate': student_classmate
+                "student_name": student_name,
+                "student_classmate": student_classmate,
             }
             return JsonResponse(data)
     except Exception as error:

@@ -1,76 +1,72 @@
-{% extends "base.html" %}
-{% block title %} VLUTE | DETAIL {% endblock title %}
-{% block content %}
-            <div class="form-group">
-                <h3><strong><center>Danh sách thiết bị kết nối WIFI</center></strong></h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tên WIFI</th>
-                            <th>Địa chỉ MAC thiết bị</th>
-                            <th>Địa chỉ MAC AP</th>
-                            <th>Băng thông download</th>
-                            <th>Băng thông upload</th>
-                            <th>Tín hiệu WIFI</th>
-                            <th>Tình trạng xác thực</th>
-                            <th>Quản lý</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for client in clients %}
-                        <tr>
-                            <td>{{client.essid | upper}}</td>
-                            <td>{{client.mac | upper }}</td>
-                            <td>{{client.ap_mac | upper }}</td>
-                            <td>{{client.rx_rate}} (Bytes)</td>
-                            <td>{{client.tx_rate}} (Bytes)</td>
-                            <td>{{client.signal}} dBm</td>
-                            {% if client.authorized == True %}
-                            <td>Đã xác thực</td>
-                            {% else %}
-                            <td>Chưa xác thực</td>
-                            {% endif %}
-                            <td id="kick-out">
-                            <button type="button" id="{{client.mac}}" class="btn btn-danger">Disconnect</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                
-            </div>
-{% endblock content %}
-{% block script %}
-    <script>
-        $(document).ready(function(){
-            $('td').css('text-align', 'center')
-            $('th').css('text-align', 'center')
-            $('th').css('background-color', 'chocolate')
-            $('th').css('color', 'white')
-            $('button').click(function(e){
-                let client_mac = e.target.id
-                let kick_out_confirm = confirm('Xác nhận kick-out thiết bị này')
-                if (kick_out_confirm == true){
-                    $.ajax({
-                        url: '/api/kick_out_client',
-                        dataType: 'json',
-                        data: {
-                            'client_mac' : client_mac
-                        },
-                        success: function(data){
-                            if (data.status == 'OK'){
-                                alert(data.msg)
-                                location.reload();
-                            }
-                            else {
-                                alert(data.msg)
-                            }
+{% extends "base.html" %} {% block title %} VLUTE | DETAIL {% endblock title %} {% block content %}
+<div class="form-group">
+    <h3><strong><center>Danh sách thiết bị kết nối WIFI</center></strong></h3>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Tên WIFI</th>
+                <th>Địa chỉ MAC thiết bị</th>
+                <th>Địa chỉ MAC AP</th>
+                <th>Băng thông download</th>
+                <th>Băng thông upload</th>
+                <th>Tín hiệu WIFI</th>
+                <th>Tình trạng xác thực</th>
+                <th>Quản lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{client.essid | upper}}</td>
+                <td>{{client.mac | upper }}</td>
+                <td>{{client.ap_mac | upper }}</td>
+                <td>{{client.rx_rate}} (Bytes)</td>
+                <td>{{client.tx_rate}} (Bytes)</td>
+                <td>{{client.signal}} dBm</td>
+                {% if client.authorized == True %}
+                <td>Đã xác thực</td>
+                {% else %}
+                <td>Chưa xác thực</td>
+                {% endif %}
+                <td id="kick-out">
+                    <button type="button" id="{{client.mac}}" class="btn btn-danger">Disconnect</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock content %} {% block script %}
+<script>
+    $(document).ready(function() {
+        $('td').css('text-align', 'center')
+        $('th').css('text-align', 'center')
+        $('th').css('background-color', 'chocolate')
+        $('th').css('color', 'white')
+        $('button').click(function(e) {
+            let client_mac = e.target.id
+            let kick_out_confirm = confirm('Xác nhận kick-out thiết bị này')
+            if (kick_out_confirm == true) {
+                $.ajax({
+                    url: '/api/kick_out_client',
+                    dataType: 'json',
+                    data: {
+                        'client_mac': client_mac
+                    },
+                    success: function(data) {
+                        if (data.status == 'OK') {
+                            alert(data.msg)
+                            location.reload();
+                        } else {
+                            alert(data.msg)
                         }
-                    })
-                }
-            })
+                    }
+                })
+            }
         })
-    </script>
+    })
+</script>
 {% endblock script %}

@@ -1,53 +1,50 @@
-{% extends "base.html"%}
-{% block title %} VLUTE | CONFIRM EMAIL {% endblock title %}
-{% block content %}
-    {% load crispy_forms_tags %}
-    {% load static %}
-    <div class="col-xs-12 col-sm-9 col-md-6 col-lg-4 col-md-offset-4">
-        <div class="form-group">
-            <h3><center>Xin vui lòng kiểm tra email và nhập mã</center></h3>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr style="background-color: chocolate; color: white">
-                        <th style="text-align: center;">Thông tin</th>
-                        <th style="text-align: center;">Chi tiết</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Địa chỉ MAC</strong></td>
-                        <td style="text-align: center;"><strong>{{client | upper }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Địa chỉ MAC AP</strong></td>
-                        <td style="text-align: center;"><strong>{{ap | upper }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" id="code" class="form-control" placeholder="Nhập mã xác thực"></td>
-                        <td style="text-align: center;">
-                            <button type="button" id="btn-confirm" class="btn  btn-success">Xác thực</button>
-                            <button type="button" id="btn-resend" class="btn  btn-danger">Gửi lại mã</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="alert"></div>
+{% extends "base.html"%} {% block title %} VLUTE | CONFIRM EMAIL {% endblock title %} {% block content %} {% load crispy_forms_tags %} {% load static %}
+<div class="col-xs-12 col-sm-9 col-md-6 col-lg-4 col-md-offset-4">
+    <div class="form-group">
+        <h3>
+            <center>Xin vui lòng kiểm tra email và nhập mã</center>
+        </h3>
     </div>
-{% endblock content %}
-{% block script %}
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr style="background-color: chocolate; color: white">
+                    <th style="text-align: center;">Thông tin</th>
+                    <th style="text-align: center;">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Địa chỉ MAC</strong></td>
+                    <td style="text-align: center;"><strong>{{client | upper }}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Địa chỉ MAC AP</strong></td>
+                    <td style="text-align: center;"><strong>{{ap | upper }}</strong></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="code" class="form-control" placeholder="Nhập mã xác thực"></td>
+                    <td style="text-align: center;">
+                        <button type="button" id="btn-confirm" class="btn  btn-success">Xác thực</button>
+                        <button type="button" id="btn-resend" class="btn  btn-danger">Gửi lại mã</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="alert"></div>
+</div>
+{% endblock content %} {% block script %}
 <script>
-    $(document).ready(function () {
-        $('#btn-confirm').click(function () {
+    $(document).ready(function() {
+        $('#btn-confirm').click(function() {
             $('#alert').hide()
             $('#btn-confirm').prop('disabled', true)
             $('#btn-resend').prop('disabled', true)
             $('#btn-confirm').text('Đang xử lý, vui lòng chờ!!!')
             let code = $('#code').val()
             let device_mac_address = '{{device_mac_address}}'
-            if (code != ''){
+            if (code != '') {
                 $.ajax({
                     url: '/api/email_verify_code',
                     dataType: 'json',
@@ -55,7 +52,7 @@
                         'code': code,
                         'client': '{{client}}'
                     },
-                    success: function (data) {
+                    success: function(data) {
                         if (data.status == 'OK') {
                             $('#btn-confirm').text('Xác thực')
                             $('#btn-confirm').prop('disabled', false)
@@ -63,8 +60,7 @@
                             $('#alert').attr('class', 'alert alert-success')
                             $('#alert').html('<strong>Thông báo:</strong> ' + data.msg).fadeIn(300)
                             window.location.href = "http://vlute.edu.vn";
-                        }
-                        else {
+                        } else {
                             $('#btn-confirm').text('Xác thực')
                             $('#btn-confirm').prop('disabled', false)
                             $('#btn-resend').prop('disabled', false)
@@ -73,18 +69,17 @@
                         }
                     }
                 })
-            }
-            else{
+            } else {
                 $('#btn-confirm').text('Xác thực')
                 $('#btn-confirm').prop('disabled', false)
                 $('#btn-resend').prop('disabled', false)
                 $('#alert').attr('class', 'alert alert-danger')
                 $('#alert').html('<strong>Thông báo:</strong> Mã xác thực không được để trống!').fadeIn(300)
             }
-            
-           
+
+
         })
-        $('#btn-resend').click(function () {
+        $('#btn-resend').click(function() {
             $('#alert').hide()
             $('#btn-confirm').prop('disabled', true)
             $('#btn-resend').prop('disabled', true)
@@ -96,17 +91,16 @@
                 data: {
                     'client': '{{client}}'
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.status == 'OK') {
                         $('#btn-resend').text('Gửi lại mã')
                         $('#btn-resend').prop('disabled', false)
                         $('#btn-confirm').prop('disabled', false)
                         $('#alert').attr('class', 'alert alert-success')
                         $('#alert').html('<strong>Thông báo:</strong> ' + data.msg).fadeIn
-                        
-                        (300)
-                    }
-                    else {
+
+                            (300)
+                    } else {
                         $('#btn-resend').text('Gửi lại mã')
                         $('#btn-resend').prop('disabled', false)
                         $('#btn-confirm').prop('disabled', false)
