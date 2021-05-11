@@ -1,0 +1,73 @@
+{% extends "base.html"%}
+{% block content %}
+{% block title %} VLUTE | WELCOME {% endblock title %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+
+    <div class="col-xs-12 col-sm-9 col-md-6 col-lg-4 col-md-offset-4">
+        <div class="form-group">
+            <h3><strong><center>Thông tin thiết bị kết nối</center></strong></h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr style="background-color: chocolate; color: white">
+                        <th style="text-align: center;">Thông tin</th>
+                        <th style="text-align: center;">Chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Địa chỉ MAC thiết bị kết nối</strong></td>
+                        <td style="text-align: center;"><strong>{{client | upper }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Địa chỉ MAC của AP</strong></td>
+                        <td style="text-align: center;"><strong>{{ap | upper }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tên WIFI</strong></td>
+                        <td style="text-align: center;"><strong>{{ssid | upper }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kết nối Internet</strong></td>
+                        <td style="text-align: center;"><button type="button" id="btn" class="btn btn-large btn-block btn-success">Connect</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="alert"></div>
+    </div>
+{% endblock content %}
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#btn').click(function () {
+            $('#alert').html('');
+            $('#btn').prop('disabled', true)
+            $('#btn').text('Đang xử lý...!')
+            $.ajax({
+                url: '/api/client_request_connect',
+                dataType: 'json',
+                data: {
+                    'client': '{{client}}',
+                    'ap': '{{ap}}'
+                },
+                success: function (data) {
+                    if (data.status == 'OK') {
+                        $('#alert').addClass('alert alert-success')
+                        $('#alert').html('<strong>Info!</strong> ' + data.msg)
+                        window.location.href = "http://vlute.edu.vn";
+                    }
+                    else {
+                        $('#alert').addClass('alert alert-danger')
+                        $('#alert').html('<strong>Info!</strong> ' + data.msg)
+                        $('#btn').prop('disabled', false)
+                        $('#btn').text('Kết nối internet')
+                    }
+                }
+            })
+        })
+    })
+</script>
+{% endblock script %}

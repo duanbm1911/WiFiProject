@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="Vi">
+    <head>
+        {% load static %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" type="image/png" href="/media/logo.png"/>
+        <title>{% block title %} {% endblock title %}</title>
+    
+        <link rel="stylesheet" href="{% static 'main/css/bootstrap-theme.css' %}">
+        <link rel="stylesheet" href="{% static 'main/css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'main/css/datatable.css' %}">
+        <link rel="stylesheet" href="{% static 'main/css/auto-complete.css' %}">
+        <!-- ------>
+        <script src="{% static 'main/js/jquery.min.js' %}"></script>
+        <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'main/js/jquery.email-autocomplete.js' %}"></script>
+        <script src="{% static 'main/js/datatable.js' %}"></script>
+        <script src="{% static 'main/js/auto-complete.js' %}"></script>
+    </head>
+    <body>
+
+        
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                      
+                      <nav class="navbar navbar-default" role="navigation">
+                          <!-- Brand and toggle get grouped for better mobile display -->
+                          <div class="navbar-header">
+                              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                  <span class="sr-only">Toggle navigation</span>
+                                  <span class="icon-bar"></span>
+                                  <span class="icon-bar"></span>
+                                  <span class="icon-bar"></span>
+                              </button>
+                          
+                                <img src="/media/logo.png" style="padding: 0vh 0vh 0vh 1vh;" class="navbar-brand" id="icon">
+                                <a class="navbar-brand" style="color: red;" href="/"><strong>VLUTE MACREG</strong></a>
+
+                          </div>
+                      
+                          <!-- Collect the nav links, forms, and other content for toggling -->
+                          <div class="collapse navbar-collapse navbar-ex1-collapse">
+                            {% if user.is_authenticated %}
+                                <ul class="nav navbar-nav">
+                                    <li><a href="/guest/connections"><strong>Danh sách kết nối</strong></a></li>
+                                    <li><a href="/guest/list"><strong>Danh sách thiết bị</strong></a></li>
+                                    <li><a href="/student/list"><strong>Danh sách sinh viên</strong></a></li>
+                                </ul>
+                                
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><strong>Xin chào {{request.user | upper}}</strong><b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/accounts/logout/">Thoát</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            {% endif %}
+                          </div><!-- /.navbar-collapse -->
+                      </nav>
+                      {% block content %}
+                      {% endblock content %}
+                </div>
+                <div class="panel-footer" style="text-align: center;">
+                    <p>Bản quyền thuộc về <strong>Nhựt Thiên</strong> | © 2021</p>
+                    <a href="http://vlute.edu.vn/" style="text-decoration: none;"><p>TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT VĨNH LONG</p></a>
+                    <p>Địa chỉ: 73 Nguyễn Huệ, phường 2, thành phố Vĩnh Long, tỉnh Vĩnh Long</p>
+                    <p>Email: spkt@vlute.edu.vn</p>
+                </div>
+          </div>
+        </div>
+    </body>
+    {% block script %}
+    {% endblock script %}
+
+</html>
+

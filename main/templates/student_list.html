@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+
+{% block title %}WIFI | STUDENT LIST{% endblock title %}
+
+{% block content %}
+
+<div class="table-responsive">
+    <table class="table table-hover table-bordered" id="table">
+        <thead>
+            <tr>
+                <th>Mã sinh viên</th>
+                <th>Họ và tên</th>
+                <th>Email</th>
+                <th>Lớp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{student.student_code}}</td>
+                <td>{{student.student_name}}</td>
+                <td>{{student.student_email}}</td>
+                <td>{{student.student_classmate}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <div class="form-group">
+        <button type="button" class="btn btn-danger" id="btn">Cập nhật danh sách</button>
+    </div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $('#table').DataTable({
+            responsive: true
+        })
+        $('#btn').click(function(){
+            let check_confirm = confirm('Xác nhận cập nhật lại danh sách?')
+            if (check_confirm == true){
+                $.ajax({
+                    url: '/api/request_student_information'
+                })
+            }
+        })
+    })
+</script>
+{% endblock script %}

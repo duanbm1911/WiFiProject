@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+{% block title %} VLUTE | REGISTER {% endblock title %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    <div class="col-xs-12 col-sm-9 col-md-6 col-lg-4 col-md-offset-4">
+        <div class="form-group">
+            <h3><strong><center>Đăng ký truy cập WIFI</center></strong></h3>
+        </div>
+        <form method="POST" id="form">
+            {% csrf_token %}
+            {{form | crispy}}
+            <div class="form-group">
+                <button type="submit" id="btn" class="btn btn-large btn-block btn-success">Đăng ký</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('strong').css('color','red')
+        $('#id_device_mac_address').val('{{client}}')
+        $('#id_device_mac_address').prop('readonly', true)
+        $('#id_ap_mac_address').val('{{ap}}')
+        $('#id_ap_mac_address').prop('readonly', true)
+        $('#form').on('submit', function () {
+                $('#btn').prop('disabled', true)
+                $('#btn').text('Đang xử lý, vui lòng chờ!!!')
+        })
+    })
+</script>
+{% endblock script %}
