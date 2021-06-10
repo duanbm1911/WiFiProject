@@ -1,0 +1,35 @@
+{% extends "base.html"%}{% block title %} VLUTE | BlACK LIST {% endblock title %} {% block content %}
+<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6 col-md-offset-3">
+    <div class="form-group">
+        <h4 style="color: red;"><strong><center>⚠️Thiết bị này đã bị chặn kết nối⚠️</center></strong></h4>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr style="background-color: chocolate; color: white">
+                    <th style="text-align: center;">Thông tin</th>
+                    <th style="text-align: center;">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Địa chỉ MAC thiết bị kết nối</strong></td>
+                    <td style="text-align: center;"><strong>{{client | upper }}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Địa chỉ MAC của AP</strong></td>
+                    <td style="text-align: center;"><strong>{{ap | upper }}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Tên WIFI</strong></td>
+                    <td style="text-align: center;"><strong>{{ssid | upper }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div>
+        <center>Xin vui lòng liên hệ với quản trị viên. Cám ơn!</center>
+    </div>
+</div>
+{% endblock content %}

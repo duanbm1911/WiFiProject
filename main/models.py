@@ -3,7 +3,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class DeviceType(models.Model):
     device_type = models.CharField(max_length=1000)
 
@@ -43,7 +42,7 @@ class UserInformation(models.Model):
     )
     device_model = models.CharField(max_length=1000, verbose_name="Tên thiết bị")
     code = models.IntegerField(null=True)
-    status = models.CharField(default="DEACTIVE", max_length=200)
+    status = models.CharField(default="DEACTIVE", max_length=200, verbose_name="Trạng thái")
 
     def __str__(self):
         return self.email

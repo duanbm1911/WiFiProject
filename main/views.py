@@ -27,9 +27,7 @@ def guest_default_portal(request):
                 "client": client.lower(),
                 "ap": ap.lower(),
             }
-            count_client = UserInformation.objects.filter(
-                device_mac_address=client
-            ).count()
+            count_client = UserInformation.objects.filter(device_mac_address=client).count()
             if count_client == 0:
                 return render(
                     request, template_name="guest_client_register.html", context=data
@@ -40,6 +38,10 @@ def guest_default_portal(request):
                 if client_status == "DEACTIVE":
                     return render(
                         request, template_name="guest_confirm_code.html", context=data
+                    )
+                elif client_status == 'BLACKLIST':
+                    return render(
+                        request, template_name="guest_black_list.html", context=data
                     )
             return render(request, template_name="guest_welcome.html", context=data)
         elif request.method == "POST":

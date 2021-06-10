@@ -43,13 +43,21 @@ class UserInformationForm(forms.ModelForm):
         else:
             return phone
 
+STATUS_CHOICE = (
+    ('ACTIVE','ACTIVE'),
+    ('DEACTIVE','DEACTIVE'),
+    ('BLACKLIST','BLACKLIST')
+)
+
 class UserInformationFormUpdate(forms.ModelForm):
+    status = forms.ChoiceField(choices=STATUS_CHOICE, label='Trạng thái')
     class Meta:
         model = UserInformation
         fields = [
             'device_mac_address',
             'bw_upload',
             'bw_download',
-            'time_used'
+            'time_used',
+            'status'
         ]
 
